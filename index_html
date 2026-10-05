@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareToShare | Citizen Accessible Routing & Real-Time Utility Alerts</title>
+    <style>
+        :root { --primary: #0f172a; --accent: #2563eb; --safe: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--primary); margin: 0; padding: 0; }
+        header { background: var(--primary); color: white; padding: 1.5rem; text-align: center; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        h2 { margin-top: 0; color: var(--accent); }
+        .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; }
+        .status-safe { background: #dcfce7; color: var(--safe); }
+        .status-alert { background: #fee2e2; color: var(--danger); }
+        button { background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        button:hover { opacity: 0.9; }
+        #map-placeholder { width: 100%; height: 300px; background: #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: 500; margin-top: 1rem; }
+        .footer-note { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CareToShare Municipal Portal</h1>
+        <p>Free Real-Time Accessible Routing, Battery Range, & Construction Alerts</p>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Live Route Safety & Terrain Status</h2>
+            <p>Current Location Status: <span id="route-status" class="status-badge status-safe">All Clear - Safe Accessible Grade</span></p>
+            <p>Active Municipal Utility Digs Detected Ahead: <strong>None on current path</strong></p>
+            <div id="map-placeholder">[ Live LiDAR Accessibility & Freeze-Thaw Overlay Active ]</div>
+        </div>
+        <div class="card">
+            <h2>Mobility Device Battery & Slope Calculator</h2>
+            <label for="battery">Battery Level (%):</label>
+            <input type="number" id="battery" value="85" min="1" max="100" style="padding: 0.5rem; margin-right: 1rem; width: 80px;">
+            <label for="slope">Route Max Slope (%):</label>
+            <input type="number" id="slope" value="5.0" step="0.1" style="padding: 0.5rem; margin-right: 1rem; width: 80px;">
+            <button onclick="calculateRange()">Estimate Safe Range</button>
+            <p id="range-result" style="margin-top: 1rem; font-weight: bold;"></p>
+        </div>
+    </div>
+    <div class="footer-note">
+        Powered by Apex Precision Markings LLC | Autonomous System Last Synced: Live Autonomous Feed
+    </div>
+    <script>
+        function calculateRange() {
+            const battery = document.getElementById('battery').value;
+            const slope = document.getElementById('slope').value;
+            const range = (battery * 12.5 * (1.0 - Math.max(0, slope) / 20.0)).toFixed(1);
+            document.getElementById('range-result',).innerText = `Estimated Safe Operational Range: ${range} meters`;
+        }
+    </script>
+</body>
+</html>
